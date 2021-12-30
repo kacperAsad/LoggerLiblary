@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -5,6 +6,7 @@ import java.util.Map;
 public class AdvancedLogger {
 
     private final Map<LoggerSettings, String> settings;
+    private boolean isFileInitialized = false;
 
     public AdvancedLogger(){
         settings = new HashMap<>();
@@ -40,10 +42,11 @@ public class AdvancedLogger {
 
     private void message(String message, LOG_TYPE type){
         if (!settings.get(LoggerSettings.logOnly).toLowerCase(Locale.ROOT).contains(type.name().toLowerCase(Locale.ROOT))) return;
+        String time = LoggerTimer.getTimeAsString();
         boolean color = Boolean.parseBoolean(settings.get(LoggerSettings.colorMode));
 
         StringBuilder b = new StringBuilder();
-        b.append('[').append(LoggerTimer.getTimeAsString()).append(']');
+        b.append('[').append(time).append(']');
         switch (type){
             case LOG -> b.append(" [LOG] => ");
             case WARNING -> b.append(" [WARNING] => ");
@@ -52,7 +55,7 @@ public class AdvancedLogger {
         }
         b.append(message);
         if (settings.get(LoggerSettings.filePath) != null){
-            saveToFile();
+            saveToFile(message, time, type);
         }
         if (color){
             switch (type){
@@ -64,7 +67,16 @@ public class AdvancedLogger {
         }
         System.out.println(b);
     }
-    private void saveToFile(){
+
+    private void initFile(){
+        String fileP = settings.get(LoggerSettings.filePath);
+        File f = new File(fileP);
+
+
+        isFileInitialized = true;
+    }
+    private void saveToFile(String message, String time, LOG_TYPE type){
+        if (!isFileInitialized) initFile();
 
     }
     private enum LOG_TYPE{
