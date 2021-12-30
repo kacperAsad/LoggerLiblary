@@ -67,7 +67,6 @@ public class AdvancedLogger {
 
 
 
-
     private void saveToFile(String message){
         // TODO
     }
