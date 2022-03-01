@@ -3,13 +3,12 @@ public enum LoggerSettings {
     debugMode,
     colorMode,
     logOnly,  // Only error etc. Symbols: w warning e error l log d debug
+    pattern,
+    isFileInitialized,
 
     // Colors
     logColor,
     warningColor,
     debugColor,
     errorColor
-
-
-
 }

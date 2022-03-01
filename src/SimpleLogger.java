@@ -13,6 +13,11 @@ public class SimpleLogger {
      */
     private static boolean debugMode = false;
     /**
+     * Used for holding date and time pattern
+     * */
+    private static String pattern = "dd-MM-yy | HH:mm:ss";
+
+    /**
      * Used for holding an option object
      */
     private static Options opt = new Options();
@@ -57,14 +62,14 @@ public class SimpleLogger {
     public static void log(String message){
         if (useColors) {
             String builder = opt.logColorCode +
-                    '[' + LoggerTimer.getTimeAsString() + ']' +
+                    '[' + LoggerTimer.getTimeAsString(pattern) + ']' +
                     " [LOG] => " +
                     message +
                     Colors.RESET;
             System.out.println(builder);
             return;
         }
-        String builder = '[' + LoggerTimer.getTimeAsString() + ']' +
+        String builder = '[' + LoggerTimer.getTimeAsString(pattern) + ']' +
                 " [LOG] => " +
                 message;
         System.out.println(builder);
@@ -77,14 +82,14 @@ public class SimpleLogger {
     public static void warning(String warnMessage){
         if (useColors){
             String builder = opt.warningColorCode +
-                    '[' + LoggerTimer.getTimeAsString() + ']' +
+                    '[' + LoggerTimer.getTimeAsString(pattern) + ']' +
                     " [WARNING] => " +
                     warnMessage +
                     Colors.RESET;
             System.out.println(builder);
             return;
         }
-        String builder = '[' + LoggerTimer.getTimeAsString() + ']' +
+        String builder = '[' + LoggerTimer.getTimeAsString(pattern) + ']' +
                 " [WARNING] => " +
                 warnMessage;
         System.out.println(builder);
@@ -98,14 +103,14 @@ public class SimpleLogger {
         if (debugMode) {
             if (useColors) {
                 String builder = opt.debugColorCode +
-                        '[' + LoggerTimer.getTimeAsString() + ']' +
+                        '[' + LoggerTimer.getTimeAsString(pattern) + ']' +
                         " [DEBUG] => " +
                         debugMessage +
                         Colors.RESET;
                 System.out.println(builder);
                 return;
             }
-            String builder = '[' + LoggerTimer.getTimeAsString() + ']' +
+            String builder = '[' + LoggerTimer.getTimeAsString(pattern) + ']' +
                     " [DEBUG] => " +
                     debugMessage;
             System.out.println(builder);
@@ -119,16 +124,30 @@ public class SimpleLogger {
     public static void error(String errorMessage){
         if (useColors){
             String builder = opt.errorColorCode +
-                    '[' + LoggerTimer.getTimeAsString() + ']' +
+                    '[' + LoggerTimer.getTimeAsString(pattern) + ']' +
                     " [ERROR] => " +
                     errorMessage +
                     Colors.RESET;
             System.out.println(builder);
             return;
         }
-        String builder = '[' + LoggerTimer.getTimeAsString() + ']' +
+        String builder = '[' + LoggerTimer.getTimeAsString(pattern) + ']' +
                 " [ERROR] => " +
                 errorMessage;
         System.out.println(builder);
     }
+
+    /**
+     * Getter for pattern variable
+     */
+    public static String getPattern() {
+        return pattern;
+    }
+    /**
+     * Setter for pattern variable
+     */
+    public static void setPattern(String pattern) {
+        SimpleLogger.pattern = pattern;
+    }
+
 }

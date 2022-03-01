@@ -5,15 +5,21 @@ import java.util.Map;
 
 public class AdvancedLogger {
 
+    /**
+     * Used for holding settings data, like a path to log-file
+     */
     private final Map<LoggerSettings, String> settings;
-    private boolean isFileInitialized = false;
-
+    /**
+     * Default Constructor for AdvancedLogger object
+     */
     public AdvancedLogger(){
         settings = new HashMap<>();
-        settings.put(LoggerSettings.filePath, null);
-        settings.put(LoggerSettings.debugMode, "false");
-        settings.put(LoggerSettings.colorMode, "true");
-        settings.put(LoggerSettings.logOnly, "error|debug|warning|log");
+        settings.put(LoggerSettings.filePath, null);                        // Path to the log dir
+        settings.put(LoggerSettings.debugMode, "false");                    // Is debug() turned on
+        settings.put(LoggerSettings.colorMode, "true");                     // Is Console output color or not
+        settings.put(LoggerSettings.logOnly, "error|debug|warning|log");    // If string contains mode, this mode will be printed if used
+        settings.put(LoggerSettings.pattern, "dd-MM-yy | HH:mm:ss");        // Pattern to use a date/time in a logs
+        settings.put(LoggerSettings.isFileInitialized, "false");            // Is current log file available
 
         // Colors
         settings.put(LoggerSettings.logColor, Colors.BLUE_BOLD_BRIGHT);
@@ -22,9 +28,14 @@ public class AdvancedLogger {
         settings.put(LoggerSettings.debugColor, Colors.GREEN_BOLD_BRIGHT);
     }
 
+    /**
+     * Method that can edit a logger settings
+     * @param s Setting type defined in {@link LoggerSettings}
+     * @param value Value that will be associated with the key. If boolean, use "true", "false" or {@link Boolean#toString(boolean)}
+     */
     @SuppressWarnings("UnusedReturnValue")
-    public boolean modifyLoggerSetting(LoggerSettings s, String value){
-        return settings.replace(s, value) != null;
+    public void modifyLoggerSetting(LoggerSettings s, String value){
+        settings.replace(s, value);
     }
 
     public void log(String logMessage){
@@ -42,7 +53,7 @@ public class AdvancedLogger {
 
     private void message(String message, LOG_TYPE type){
         if (!settings.get(LoggerSettings.logOnly).toLowerCase(Locale.ROOT).contains(type.name().toLowerCase(Locale.ROOT))) return;
-        String time = LoggerTimer.getTimeAsString();
+        String time = LoggerTimer.getTimeAsString(settings.get(LoggerSettings.pattern));
         boolean color = Boolean.parseBoolean(settings.get(LoggerSettings.colorMode));
 
         StringBuilder b = new StringBuilder();
@@ -70,13 +81,16 @@ public class AdvancedLogger {
 
     private void initFile(){
         String fileP = settings.get(LoggerSettings.filePath);
+        if (fileP == null) return;
         File f = new File(fileP);
-
-
-        isFileInitialized = true;
+        if (!f.canWrite()){
+            warning("");
+            return;
+        }
+        settings.put(LoggerSettings.isFileInitialized, "true");
     }
     private void saveToFile(String message, String time, LOG_TYPE type){
-        if (!isFileInitialized) initFile();
+        if (!Boolean.parseBoolean(settings.get(LoggerSettings.isFileInitialized))) initFile();
 
     }
     private enum LOG_TYPE{
