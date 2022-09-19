@@ -1,8 +1,10 @@
 /**
  * Used for logging in small projects, static usage e.g. SimpleLogger.log().
  * Have a log, warning, debug and error and can color an output
+ * This class is deprecated. Use {@link AdvancedLogger} instead
  */
 
+@Deprecated
 public class SimpleLogger {
     /**
      * Used for holding an information about using colors
