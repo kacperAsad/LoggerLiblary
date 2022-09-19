@@ -32,6 +32,7 @@ public class AdvancedLogger {
         settings.put(LoggerSettings.logOnly, "error|debug|warning|log");    // If string contains mode, this mode will be printed if used
         settings.put(LoggerSettings.pattern, "dd-MM-yy | HH:mm:ss");        // Pattern to use a date/time in a logs
         settings.put(LoggerSettings.isFileInitialized, "false");            // Is current log file available
+        settings.put(LoggerSettings.override , "false");                    // Is file with same name may be overridden
 
         // Colors
         settings.put(LoggerSettings.logColor, Colors.BLUE_BOLD_BRIGHT);
@@ -50,25 +51,28 @@ public class AdvancedLogger {
         settings.replace(s, value);
     }
 
+    @SuppressWarnings("unused")
     public void log(String logMessage) {
         message(logMessage, LOG_TYPE.LOG);
     }
 
+    @SuppressWarnings("unused")
     public void debug(String debugMessage) {
         message(debugMessage, LOG_TYPE.DEBUG);
     }
 
+    @SuppressWarnings("unused")
     public void warning(String warningMessage) {
         message(warningMessage, LOG_TYPE.WARNING);
     }
 
+    @SuppressWarnings("unused")
     public void error(String errorMessage) {
         message(errorMessage, LOG_TYPE.ERROR);
     }
 
     private void message(String message, LOG_TYPE type) {
-        if (!settings.get(LoggerSettings.logOnly).toLowerCase(Locale.ROOT).contains(type.name().toLowerCase(Locale.ROOT)))
-            return;
+        if (!settings.get(LoggerSettings.logOnly).toLowerCase(Locale.ROOT).contains(type.name().toLowerCase(Locale.ROOT))) return;
         String time = LoggerTimer.getTimeAsString(settings.get(LoggerSettings.pattern));
         boolean color = Boolean.parseBoolean(settings.get(LoggerSettings.colorMode));
 
@@ -117,7 +121,23 @@ public class AdvancedLogger {
             System.out.println("Log path is not directory!");
             return false;
         }
-        logFile = new File(logDir.getAbsolutePath() + '/' + LoggerTimer.getTimeAsString(pattern));
+        logFile = new File(logDir.getAbsolutePath() + '\\' + LoggerTimer.getTimeAsString(pattern));
+        if (logFile.exists()){
+            if (Boolean.parseBoolean(settings.get(LoggerSettings.override))) {
+                try {
+                    if (logFile.delete()) {
+                        System.out.println("Log File Override");
+                    } else {
+                        System.out.println("Can't override file");
+                    }
+                } catch (SecurityException se){
+                    se.printStackTrace();
+                }
+            } else {
+                System.out.println("Another log file have the same name, log will be lost");
+                return false;
+            }
+        }
         try {
             if (!logFile.createNewFile()) {
                 System.out.println("Log file can't be created; Another file have the same name. Try to change the pattern");
