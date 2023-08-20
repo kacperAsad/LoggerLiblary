@@ -1,0 +1,45 @@
+name: build-release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setting up JDK 19
+        uses: actions/setup-java@v3
+        with:
+          java-version: 19
+          distribution: 'temurin'
+      - name: Build wit Ant
+        run: ant -noinput -buildfile build.xml
+      - name: Uploading jar artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Package
+          path: out/artifacts/jar/LoggerLibrary.jar
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          tag_name: jar
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Assets
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./LoggerLibrary.jar
+          asset_name: LoggerLibrary-v${{ github.run_number }}.jar
+          asset_content_type: library/jar

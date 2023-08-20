@@ -29,6 +29,7 @@ public class SimpleLogger {
      * @param use true: use colors
      *            false: don't use a colors
      */
+
     public static void useColors(boolean use){
         if (use){
             log("Color Messages Turned ON");
