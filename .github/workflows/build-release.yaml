@@ -40,6 +40,6 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./LoggerLibrary.jar
+          asset_path: ./Package
           asset_name: LoggerLibrary-v${{ github.run_number }}.jar
           asset_content_type: library/jar
