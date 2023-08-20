@@ -42,5 +42,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./out/artifacts/jar/LoggerLibrary.jar
-          asset_name: LoggerLibrary-v${{ github.run_number }}.jar
+          asset_name: LoggerLibrary.jar
           asset_content_type: library/jar
