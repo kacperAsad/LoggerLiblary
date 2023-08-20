@@ -16,7 +16,7 @@ jobs:
         with:
           java-version: 19
           distribution: 'temurin'
-      - name: Build wit Ant
+      - name: Build with Ant
         run: ant -noinput -buildfile build.xml
       - name: Uploading jar artifact
         uses: actions/upload-artifact@v3
@@ -33,6 +33,7 @@ jobs:
           tag_name: release
           draft: false
           prerelease: false
+          body: Automatic release
       - name: Upload Release Assets
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
