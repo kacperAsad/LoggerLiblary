@@ -16,3 +16,5 @@ Logger can be configured to display only some types, like only warnings, or logs
 Debug mode also can be turned on and off to display debug messages (don't implemented deleting debug code in runtime yet)
 This logger can also save logs to files, with own format name (can use real time and date to generate name)
 
+If u want latest release of this library, use this link
+https://github.com/kacperAsad/LoggerLiblary/releases/latest/download/LoggerLibrary.jar
