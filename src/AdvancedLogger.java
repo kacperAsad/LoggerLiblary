@@ -52,26 +52,26 @@ public class AdvancedLogger {
     }
 
     @SuppressWarnings("unused")
-    public void log(String logMessage) {
+    public void log(Object logMessage) {
         message(logMessage, LOG_TYPE.LOG);
     }
 
     @SuppressWarnings("unused")
-    public void debug(String debugMessage) {
+    public void debug(Object debugMessage) {
         message(debugMessage, LOG_TYPE.DEBUG);
     }
 
     @SuppressWarnings("unused")
-    public void warning(String warningMessage) {
+    public void warning(Object warningMessage) {
         message(warningMessage, LOG_TYPE.WARNING);
     }
 
     @SuppressWarnings("unused")
-    public void error(String errorMessage) {
+    public void error(Object errorMessage) {
         message(errorMessage, LOG_TYPE.ERROR);
     }
 
-    private void message(String message, LOG_TYPE type) {
+    private void message(Object message, LOG_TYPE type) {
         if (!settings.get(LoggerSettings.logOnly).toLowerCase(Locale.ROOT).contains(type.name().toLowerCase(Locale.ROOT))) return;
         String time = LoggerTimer.getTimeAsString(settings.get(LoggerSettings.pattern));
         boolean color = Boolean.parseBoolean(settings.get(LoggerSettings.colorMode));
@@ -158,12 +158,15 @@ public class AdvancedLogger {
         return true;
     }
 
-    private void saveToFile(String message, String time, LOG_TYPE type) {
+    private void saveToFile(Object message, String time, LOG_TYPE type) {
         if (!Boolean.parseBoolean(settings.get(LoggerSettings.isFileInitialized)) || logFile == null) {
             if (!initFile()) return;
         }  // Run initFile method
         if (logWriter == null){
             System.out.println("You have turned on saving logs to file, but it's not saving your data. Try to re-launch app");
+            return;
+        }
+        if (message == null) {
             return;
         }
         StringBuilder text = new StringBuilder();
