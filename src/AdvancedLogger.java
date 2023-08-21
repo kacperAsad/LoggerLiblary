@@ -58,7 +58,10 @@ public class AdvancedLogger {
 
     @SuppressWarnings("unused")
     public void debug(Object debugMessage) {
-        message(debugMessage, LOG_TYPE.DEBUG);
+        if (Boolean.parseBoolean(settings.get(LoggerSettings.debugMode))) {
+            message(debugMessage, LOG_TYPE.DEBUG);
+        }
+
     }
 
     @SuppressWarnings("unused")
